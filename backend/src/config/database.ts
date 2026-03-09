@@ -2,7 +2,12 @@ import mongoose from "mongoose";
 
 export const connectDb = async () => {
   try {
-    await mongoose.connect(process.env.MONGODB_URI as string);
+    const monguri = process.env.MONGODB_URI;
+    if (!monguri) {
+      throw new Error("Mongo Uri Empty");
+    }
+
+    await mongoose.connect(monguri);
     console.log("DB Connected");
   } catch (error) {
     console.error("Error:", error);

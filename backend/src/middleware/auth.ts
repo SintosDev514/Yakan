@@ -12,11 +12,11 @@ export const protectedRoute = [
     try {
       const { userId: clerkId } = getAuth(req);
 
-      if (!clerkId) {
-        return res
-          .status(401)
-          .json({ success: false, message: "Unauthorized / invalid Token" });
-      }
+      // if (!clerkId) {
+      //   return res
+      //     .status(401)
+      //     .json({ success: false, message: "Unauthorized / invalid Token" });
+      // }
 
       const user = await User.findOne({ clerkId });
 
@@ -29,8 +29,8 @@ export const protectedRoute = [
 
       next();
     } catch (error) {
-      console.error("Error in Protected Route", error);
-      res.status(500).json({ success: false });
+      res.status(500);
+      next(error);
     }
   },
 ];

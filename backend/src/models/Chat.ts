@@ -2,8 +2,8 @@ import mongoose, { Schema, type Document } from "mongoose";
 
 export interface IChat extends Document {
   participants: mongoose.Types.ObjectId[];
-  lastMessage?: mongoose.Types.ObjectId[];
-  latMessageAt: Date;
+  lastMessage?: mongoose.Types.ObjectId;
+  lastMessageAt: Date;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -22,7 +22,7 @@ const chatSchema = new Schema<IChat>(
       ref: "Message",
       default: null,
     },
-    latMessageAt: {
+    lastMessageAt: {
       type: Date,
       default: Date.now,
     },
@@ -32,4 +32,4 @@ const chatSchema = new Schema<IChat>(
   },
 );
 
-export const chat = mongoose.model("Chat", chatSchema);
+export const Chat = mongoose.model("Chat", chatSchema);

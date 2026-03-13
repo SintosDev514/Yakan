@@ -1,9 +1,9 @@
 import { Router } from "express";
+import { protectedRoute } from "../middleware/auth";
+import { getUsers } from "../controller/userController";
 
 const router = Router();
 
-router.get("/test", (req, res) => {
-  res.json({ status: "ok", message: "gana" });
-});
+router.get("/", protectedRoute, getUsers);
 
 export default router;

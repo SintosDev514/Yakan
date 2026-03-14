@@ -22,7 +22,7 @@ export async function getChats(
 
       return {
         _id: chat._id,
-        participants: otherParticipant,
+        participants: otherParticipant ?? null,
         lastMessage: chat.lastMessage,
         lastMessageAt: chat.lastMessageAt,
         createdAt: chat.createdAt,
@@ -42,16 +42,26 @@ export async function getOrCreateChat(
 ) {
   try {
     const userId = req.userId;
-    const { participants } = req.params;
+    const { participantsId } = req.params;
+
+    if (!participantsId) {
+      res.status(400).json({ message: "Participant ID is required" });
+      return;
+    }
+
+    if (userId === participantsId) {
+      res.status(400).json({ message: "  Cannot create chat with yourself " });
+      return;
+    }
 
     let chat = await Chat.findOne({
-      participants: { $all: [userId, participants] },
+      participants: { $all: [userId, participantsId] },
     })
       .populate("participants", "name email avatar")
       .populate("lastMessage");
 
     if (!chat) {
-      const newChat = new Chat({ participants: [userId, participants] });
+      const newChat = new Chat({ participants: [userId, participantsId] });
 
       await newChat.save();
 

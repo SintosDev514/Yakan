@@ -5,7 +5,7 @@ import { initializeSocket } from "./src/utils/socket";
 
 const PORT = process.env.PORT || 5000;
 
-const httpserver = createServer();
+const httpserver = createServer(app);
 
 initializeSocket(httpserver);
 

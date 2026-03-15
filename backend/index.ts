@@ -1,11 +1,17 @@
 import { connectDb } from "./src/config/database";
 import app from "./src/app";
+import { createServer } from "http";
+import { initializeSocket } from "./src/utils/socket";
 
 const PORT = process.env.PORT || 5000;
 
+const httpserver = createServer(app);
+
+initializeSocket(httpserver);
+
 try {
   connectDb().then(() => {
-    app.listen(PORT, () => {
+    httpserver.listen(PORT, () => {
       console.log("System is Up on:", PORT);
     });
   });

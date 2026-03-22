@@ -1,5 +1,7 @@
 import express from "express";
 
+import path from "path";
+
 import authRoutes from "./routes/authRoutes";
 import chatRoutes from "./routes/chatRoutes";
 import messageRoutes from "./routes/messageRoutes";
@@ -23,5 +25,14 @@ app.use("/api/message", messageRoutes);
 app.use("/api/users", userRoutes);
 
 app.use(errorHandler);
+
+// serve front end in production
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../../web/dist")));
+
+  app.get("/{*any}", (_, res) => {
+    res.sendFile(path.join(__dirname, "../../web/dist/index.html"));
+  });
+}
 
 export default app;
